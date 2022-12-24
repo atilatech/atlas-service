@@ -7,15 +7,13 @@ app = Flask(__name__)
 def index():
     return "Atlas Service"
 
-@app.route('/transcribe', methods=['GET', 'POST'])
-def transcribe():
-    url = request.values.get('q') or request.json.get('urls')
-    audio_metadata = download_mp3(url)
-    transcribed_audio = transcribe_file(f"./mp3/${audio_metadata['id']}.mp3")
-
-    audio_metadata['transcript'] = transcribed_audio['text']
+@app.route('/search', methods=['GET', 'POST'])
+def search():
+    url = rrequest.json.get('url')
+    query = rrequest.json.get('q')
+    video_segments = transcribe_and_search_video(url, query)
     
-    return {"transcript": transcribed_videos}
+    return {"results": transcribed_videos}
 
 if __name__ == '__main__':
     app.run(port=5000, debug=True)

@@ -7,6 +7,8 @@ name = "pypi"
 flask = "*"
 pytube = "*"
 requests = "*"
+sentence-transformers = "*"
+pinecone-client = "*"
 
 [dev-packages]
 
