@@ -4,30 +4,33 @@ from tqdm import tqdm
 
 from atlas.utils import parse_video_id
 from config import PINECONE_API_KEY
+from functools import lru_cache
 
-model_id = "multi-qa-mpnet-base-dot-v1"
-
-sentence_transformer_model = SentenceTransformer(model_id)
-dimensions = sentence_transformer_model.get_sentence_embedding_dimension()
-
-index_id = "youtube-search"
+sentence_transformer_model_model_id = "multi-qa-mpnet-base-dot-v1"
+pinecone_index_id = "youtube-search"
+batch_size = 64
 
 pinecone.init(
     api_key=PINECONE_API_KEY,
     environment="us-west1-gcp"
 )
 
-if index_id not in pinecone.list_indexes():
-    pinecone.create_index(
-        index_id,
-        dimensions,
-        metric="dotproduct"
-    )
+pinecone_index = pinecone.Index(pinecone_index_id)
 
-pinecone_index = pinecone.Index(index_id)
-pinecone_index.describe_index_stats()
 
-batch_size = 64
+@lru_cache
+def get_sentence_transformer_model(model_id: str = sentence_transformer_model_model_id) -> SentenceTransformer:
+    return SentenceTransformer(model_id)
+
+
+def initialize_pinecone_index():
+    dimensions = get_sentence_transformer_model().get_sentence_embedding_dimension()
+    if pinecone_index_id not in pinecone.list_indexes():
+        pinecone.create_index(
+            pinecone_index_id,
+            dimensions,
+            metric="dotproduct"
+        )
 
 
 def does_video_exist(video_url):
@@ -59,7 +62,7 @@ def upload_transcripts_to_vector_db(transcripts_for_upload):
             row['text'] for row in transcripts_for_upload[i:i_end]
         ]
         # create the embedding vectors
-        batch_embeds = sentence_transformer_model.encode(batch_text).tolist()
+        batch_embeds = get_sentence_transformer_model().encode(batch_text).tolist()
         # extract IDs to be attached to each embedding and metadata
         batch_ids = [
             row['id'] for row in transcripts_for_upload[i:i_end]
@@ -73,7 +76,7 @@ def upload_transcripts_to_vector_db(transcripts_for_upload):
 
 
 def query_model(query, video_id=""):
-    encoded_query = sentence_transformer_model.encode(query).tolist()
+    encoded_query = get_sentence_transformer_model().encode(query).tolist()
     metadata_filter = {"video_id": {"$eq": video_id}} if video_id else None
     return pinecone_index.query(encoded_query, top_k=5,
                                 include_metadata=True,

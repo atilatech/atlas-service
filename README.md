@@ -18,3 +18,14 @@ prefixing all your commands with `python -m pipenv`
 python -m pipenv install
 python -m pipenv run python src/app.py
 ```
+
+## Using Gitpod
+
+To set the environment variables in gitpod,
+edit the following and paste into your terminal.
+
+```bash
+eval $(gp env -e HUGGING_FACE_URL=your_value)
+eval $(gp env -e HUGGING_FACE_API_KEY=your_value)
+eval $(gp env -e PINECONE_API_KEY=your_value)
+```
