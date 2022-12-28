@@ -11,8 +11,15 @@ def index():
 
 @app.route('/search', methods=['GET', 'POST'])
 def search():
-    url = request.json.get('url')
-    query = request.json.get('q')
+    if request.method == 'POST':
+        # Handle POST request
+        url = request.json.get('url')
+        query = request.json.get('q')
+    else:
+        # Handle GET request
+        url = request.args.get('url')
+        query = request.args.get('q')
+
     transcribed_video = transcribe_and_search_video(url, query)
 
     return {"results": transcribed_video}

@@ -29,3 +29,11 @@ eval $(gp env -e HUGGING_FACE_URL=your_value)
 eval $(gp env -e HUGGING_FACE_API_KEY=your_value)
 eval $(gp env -e PINECONE_API_KEY=your_value)
 ```
+
+## Using the API
+
+You can test as a GET request by putting setting the `?url=<url>` and `&q=<search term>` 
+
+Example: https://5000-atilatech-atlasservice-9ogzr6pvij2.ws-us80.gitpod.io/search?url=https://youtu.be/lOI0Gs_t6cQ&q=neural%20network
+
+You can also send POST requests.

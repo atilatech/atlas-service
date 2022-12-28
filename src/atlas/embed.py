@@ -80,4 +80,4 @@ def query_model(query, video_id=""):
     metadata_filter = {"video_id": {"$eq": video_id}} if video_id else None
     return pinecone_index.query(encoded_query, top_k=5,
                                 include_metadata=True,
-                                filter=metadata_filter)
+                                filter=metadata_filter).to_dict()
