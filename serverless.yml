@@ -1,3 +1,5 @@
+org: atilatech
+app: atlas-service
 service: atlas-service
 
 provider:

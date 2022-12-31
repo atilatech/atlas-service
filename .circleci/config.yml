@@ -1,0 +1,48 @@
+version: 2
+
+# The following stanza defines a map named defaults with a variable that may be inserted using the YAML merge (<<: *) key
+# later in the file to save some typing. See http://yaml.org/type/merge.html for details.
+
+defaults: &defaults
+  docker:
+    - image: circleci/python:3.6.1
+
+jobs:
+  deploy:
+     <<: *defaults
+     steps:
+       - checkout
+       - restore_cache:
+           keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-
+
+      # this is slow. build a custom docker image and use that
+       - run:
+          name: Install node and npm
+          command: |
+            curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
+            sudo apt-get install -y nodejs
+            node --version && npm -v
+       - run:
+          name: Install Serverless CLI and dependencies
+          command: |
+            sudo npm i -g serverless
+            npm install
+       - run:
+           name: Deploy to prod if master branch else deploy to staging
+           command: |
+                if [ "${CIRCLE_BRANCH}" == "master" ]; then
+                    echo 'deploying to prod';
+                    sls deploy --stage prod --aws-s3-accelerate --verbose
+                else
+                    echo 'deploying to staging';
+                    sls deploy --stage staging --aws-s3-accelerate --verbose
+                fi
+
+workflows:
+  version: 2
+  deploy:
+    jobs:
+      - deploy
+pro-only: true
