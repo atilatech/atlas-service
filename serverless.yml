@@ -11,14 +11,16 @@ provider:
     HUGGING_FACE_API_KEY: ""
     PINECONE_API_KEY: ""
   # https://github.com/serverless/serverless/issues/6241#issuecomment-531562596
-  iamRoleStatements:
-    - Effect: Allow
-      Action:
-        - secretsmanager:GetSecretValue
-      Resource:
-        - "arn:aws:secretsmanager:us-east-1:439512693357:*"
-  iamManagedPolicies:
-    - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+  iam:
+    role:
+      managedPolicies:
+        - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+      statements:
+        - Effect: Allow
+          Action:
+            - secretsmanager:GetSecretValue
+          Resource:
+            - "arn:aws:secretsmanager:us-east-1:439512693357:*"
 plugins:
   - serverless-python-requirements
   - serverless-wsgi
@@ -33,11 +35,10 @@ custom:
     prod: true
 useDotenv: true
 package:
-  exclude:
-    - .env
-    - node_modules/**
-    - venv/**
-
+  patterns:
+    - '!.env'
+    - '!venv/**'
+    - '!node_modules/**'
 functions:
  app:
    handler: wsgi_handler.handler
