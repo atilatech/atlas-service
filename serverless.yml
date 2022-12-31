@@ -30,6 +30,7 @@ custom:
     packRequirements: false
   pythonRequirements:
     usePipenv: false
+    zip: true
     slim: true
     layer: true
   enabled:
@@ -45,6 +46,8 @@ package:
 functions:
  app:
    handler: wsgi_handler.handler
+   layers:
+    - Ref: PythonRequirementsLambdaLayer
    events:
      - http: ANY /
      - http: 'ANY /{proxy+}'
