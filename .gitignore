@@ -1,0 +1,6 @@
+venv
+mp3
+#ignore pycharm files
+.idea
+.env
+node_modules

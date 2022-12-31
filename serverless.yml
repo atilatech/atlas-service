@@ -1,0 +1,49 @@
+org: atilatech
+app: atlas-service
+service: atlas-service
+
+provider:
+  name: aws
+  runtime: python3.8
+  stage: ${opt:stage, 'staging'}
+  region: us-east-1
+  timeout: 300 # 300 seconds = 5 minutes
+  environment:
+    HUGGING_FACE_URL: ""
+    HUGGING_FACE_API_KEY: ""
+    PINECONE_API_KEY: ""
+  # https://github.com/serverless/serverless/issues/6241#issuecomment-531562596
+  iam:
+    role:
+      managedPolicies:
+        - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+      statements:
+        - Effect: Allow
+          Action:
+            - secretsmanager:GetSecretValue
+          Resource:
+            - "arn:aws:secretsmanager:us-east-1:439512693357:*"
+plugins:
+  - serverless-python-requirements
+  - serverless-wsgi
+custom:
+  wsgi:
+    app: src.app.app
+  pythonRequirements:
+    dockerizePip: non-linux
+  enabled:
+    dev: false
+    staging: false
+    prod: true
+useDotenv: true
+package:
+  patterns:
+    - '!.env'
+    - '!venv/**'
+    - '!node_modules/**'
+functions:
+ app:
+   handler: wsgi_handler.handler
+   events:
+     - http: ANY /
+     - http: 'ANY /{proxy+}'
