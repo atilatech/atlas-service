@@ -27,8 +27,8 @@ plugins:
 custom:
   wsgi:
     app: src.app.app
+    packRequirements: false
   pythonRequirements:
-    dockerizePip: non-linux
     usePipenv: false
   enabled:
     dev: false
