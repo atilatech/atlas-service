@@ -3,9 +3,12 @@ version: 2.1
 # The following stanza defines a map named defaults with a variable that may be inserted using the YAML merge (<<: *) key
 # later in the file to save some typing. See http://yaml.org/type/merge.html for details.
 
+orbs:
+  python: circleci/python@2.0.3
+
 defaults: &defaults
   docker:
-    - image: cimg/python:3.8
+    - image: cimg/python:3.8-node
 
 jobs:
   deploy:
