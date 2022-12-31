@@ -29,10 +29,12 @@ jobs:
            command: |
                 if [ "${CIRCLE_BRANCH}" == "master" ]; then
                     echo 'deploying to prod';
-                    sls deploy --stage prod --aws-s3-accelerate --verbose
+                    sls package --stage prod
+                    sls deploy --stage prod --aws-s3-accelerate --verbose --package ./.serverless
                 else
                     echo 'deploying to staging';
-                    sls deploy --stage staging --aws-s3-accelerate --verbose
+                    sls package --stage staging
+                    sls deploy --stage staging --aws-s3-accelerate --verbose --package ./.serverless
                 fi
 
 workflows:
