@@ -30,6 +30,8 @@ custom:
     packRequirements: false
   pythonRequirements:
     usePipenv: false
+    slim: true
+    layer: true
   enabled:
     dev: false
     staging: false
