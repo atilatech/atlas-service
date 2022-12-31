@@ -29,6 +29,7 @@ custom:
     app: src.app.app
   pythonRequirements:
     dockerizePip: non-linux
+    usePipenv: false
   enabled:
     dev: false
     staging: false
