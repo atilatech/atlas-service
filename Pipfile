@@ -9,6 +9,7 @@ pytube = "*"
 requests = "*"
 sentence-transformers = "*"
 pinecone-client = "*"
+flask-cors = "*"
 
 [dev-packages]
 

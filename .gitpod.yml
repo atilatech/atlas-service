@@ -1,6 +1,7 @@
 tasks:
   - init: |
       pipenv install
+      npm install -g serverless
   - command: |
       pipenv run python src/app.py
 

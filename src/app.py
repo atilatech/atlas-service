@@ -1,7 +1,9 @@
 from flask import Flask, request
+from flask_cors import CORS
 from atlas.transcribe import transcribe_and_search_video
 
 app = Flask(__name__)
+CORS(app)
 
 
 @app.route('/')
