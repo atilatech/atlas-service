@@ -5,3 +5,5 @@ mp3
 .env
 node_modules
 .DS_Store
+__pycache__/
+serverless.dev.yml

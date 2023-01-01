@@ -1,6 +1,10 @@
 from datetime import timedelta
+import json
 import urllib
 
+import requests
+
+from atlas.config import HUGGING_FACE_API_KEY, HUGGING_FACE_ENDPOINT_URL
 
 def convert_seconds_to_string(seconds):
     days, seconds = divmod(seconds, 86400)
@@ -21,3 +25,33 @@ def parse_video_id(url):
         return video_id
     else:
         return None
+
+
+def send_transcription_request(url: str):
+    payload = json.dumps({
+        "inputs": "",  # inputs key is not used but our endpoint expects it
+        # see: https://huggingface.co/docs/inference-endpoints/guides/custom_handler#2-create-endpointhandler-cp
+        "video_url": url,
+    })
+    headers = {
+        'Authorization': f'Bearer {HUGGING_FACE_API_KEY}',
+        'Content-Type': 'application/json'
+    }
+
+    response = requests.request("POST", HUGGING_FACE_ENDPOINT_URL, headers=headers, data=payload)
+    return response.json()
+
+
+def send_encoding_request(phrase: str):
+    payload = json.dumps({
+        "inputs": "",  # inputs key is not used but our endpoint expects it
+        "query": phrase,
+    })
+    headers = {
+        'Authorization': f'Bearer {HUGGING_FACE_API_KEY}',
+        'Content-Type': 'application/json'
+    }
+
+    response = requests.request("POST", HUGGING_FACE_ENDPOINT_URL, headers=headers, data=payload)
+    return response.json()
+

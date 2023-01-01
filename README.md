@@ -7,6 +7,24 @@ For a tutorial on how this service works, see the [Deploy Whisper and Sentence T
 
 ## Quickstart
 
+TODO: Getting weird import errors when trying to import sibling directories.
+
+`pipenv run python src/app.py`
+`ModuleNotFoundError: No module named 'atlas'`
+
+Temporary workaround: use `sls wsgi serve --config serverless.dev.yml`. 
+
+1. `cp serverless.yml serverless.dev.yml`
+2. Set the following environment variables:
+```yaml
+  environment:
+    HUGGING_FACE_URL: ""
+    HUGGING_FACE_API_KEY: ""
+    PINECONE_API_KEY: ""
+```
+3. `sls wsgi serve --config serverless.dev.yml`
+Make sure to put the credentials in serverless.dev.yml and not `serverless.yml`
+
 ```bash
 pip install pipenv
 pipenv install
@@ -20,6 +38,11 @@ prefixing all your commands with `python -m pipenv`
 python -m pipenv install
 python -m pipenv run python src/app.py
 ```
+
+### Test the service as a Lambda function locally
+To simulate how the lambda sevice will run locally:
+
+`sls wsgi serve`
 
 ## Using Gitpod
 
