@@ -58,22 +58,22 @@ def does_video_exist(video_url):
     return len(query_response['matches']) > 0
 
 
-def upload_transcripts_to_vector_db(transcripts_for_upload):
+def upload_transcripts_to_vector_db(transcripts):
     # loop through in batches of 64
-    for i in tqdm(range(0, len(transcripts_for_upload), batch_size)):
+    for i in tqdm(range(0, len(transcripts), batch_size)):
         # find end position of batch (for when we hit end of data)
-        i_end = min(len(transcripts_for_upload) - 1, i + batch_size)
+        i_end = min(len(transcripts), i + batch_size)
         # extract the metadata like text, start/end positions, etc
         batch_meta = [{
-            **transcripts_for_upload[x]
-        } for x in range(i, i_end)]
+            **row
+        } for row in transcripts[i:i_end]]
         # create the embedding vectors
         batch_vectors = [
-            row['vectors'] for row in transcripts_for_upload[i:i_end]
+            row.pop('vectors') for row in batch_meta
         ]
         # extract IDs to be attached to each embedding and metadata
         batch_ids = [
-            row['id'] for row in transcripts_for_upload[i:i_end]
+            row['id'] for row in batch_meta
         ]
         # 'upsert' (insert) IDs, embeddings, and metadata to index
         to_upsert = list(zip(

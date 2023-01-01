@@ -112,18 +112,14 @@ class EndpointHandler():
         all_batches = []
         for i in tqdm(range(0, len(transcripts), batch_size)):
             # find end position of batch (for when we hit end of data)
-            i_end = min(len(transcripts) - 1, i + batch_size)
+            i_end = min(len(transcripts), i + batch_size)
             # extract the metadata like text, start/end positions, etc
             batch_meta = [{
-                **transcripts[x]
-            } for x in range(i, i_end)]
+                **row
+            } for row in transcripts[i:i_end]]
             # extract only text to be encoded by embedding model
             batch_text = [
-                row['text'] for row in transcripts[i:i_end]
-            ]
-            # extract IDs to be attached to each embedding and metadata
-            batch_ids = [
-                row['id'] for row in transcripts[i:i_end]
+                row['text'] for row in batch_meta
             ]
             # create the embedding vectors
             batch_vectors = self.sentence_transformer_model.encode(batch_text).tolist()
