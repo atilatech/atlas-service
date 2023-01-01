@@ -12,7 +12,7 @@ provider:
     PINECONE_API_KEY: ""
     # http://robertorocha.info/setting-up-a-selenium-web-scraper-on-aws-lambda-with-python/
     # Allows us to import packages such as atlas.transcribe
-    PYTHONPATH: /var/task/src:/var/task/lib
+    PYTHONPATH: /var/task
   # https://github.com/serverless/serverless/issues/6241#issuecomment-531562596
   iam:
     role:
