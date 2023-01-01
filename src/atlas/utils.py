@@ -12,7 +12,7 @@ def parse_video_id(url):
     parsed_url = urllib.parse.urlparse(url)
 
     # Check if the URL is a YouTube URL
-    if parsed_url.netloc in ['www.youtube.com', 'youtu.be']:
+    if parsed_url and parsed_url.netloc in ['www.youtube.com', 'youtu.be']:
         # Extract the video ID from the path or query parameters
         if parsed_url.netloc == 'www.youtube.com':
             video_id = urllib.parse.parse_qs(parsed_url.query)['v'][0]

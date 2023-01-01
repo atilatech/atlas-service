@@ -22,7 +22,7 @@ def search():
         url = request.args.get('url')
         query = request.args.get('q')
 
-    transcribed_video = transcribe_and_search_video(url, query)
+    transcribed_video = transcribe_and_search_video(query, url)
 
     return {"results": transcribed_video}
 
