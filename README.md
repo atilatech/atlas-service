@@ -65,3 +65,8 @@ curl --location --request POST 'http://127.0.0.1:5000/search' \
     "q": "throw under bus"
 }'
 ```
+
+## Deployment
+
+1. The service is deployed as an AWS Lambda function
+2. View [Function logs in Cloudwatch](https://us-east-1.console.aws.amazon.com/cloudwatch/home?region=us-east-1#logsV2:log-groups/log-group/$252Faws$252Flambda$252Fatlas-service-prod-app)
