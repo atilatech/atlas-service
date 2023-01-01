@@ -9,6 +9,7 @@ pytube = "*"
 requests = "*"
 pinecone-client = "*"
 flask-cors = "*"
+tqdm = "*"
 
 [dev-packages]
 
