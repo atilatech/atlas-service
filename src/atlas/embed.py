@@ -22,7 +22,7 @@ pinecone_index = pinecone.Index(pinecone_index_id)
 def send_encoding_request(phrase: str):
     payload = json.dumps({
         "inputs": "",  # inputs key is not used but our endpoint expects it
-        "segments": [{'text': phrase, 'id': '', }],
+        "query": phrase,
     })
     headers = {
         'Authorization': f'Bearer {HUGGING_FACE_API_KEY}',
@@ -86,7 +86,7 @@ def upload_transcripts_to_vector_db(transcripts):
 def query_model(query, video_id=""):
     encoded_query = send_encoding_request(query)
     metadata_filter = {"video_id": {"$eq": video_id}} if video_id else None
-    vectors = encoded_query[0]['vectors']
+    vectors = encoded_query['encoded_segments'][0]['vectors']
     return pinecone_index.query(vectors, top_k=5,
                                 include_metadata=True,
                                 filter=metadata_filter).to_dict()

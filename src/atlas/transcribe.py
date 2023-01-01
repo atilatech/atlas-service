@@ -34,7 +34,7 @@ def transcribe_and_search_video(query, url = None, verbose=True):
         if not url:
             print('No URL provided, searching all videos')
         else:
-              print('Video already exists:{url}')
+              print(f'Video already exists:{url}')
     results = query_model(query, video_id)
     t1 = time.time()
     total = t1 - t0
