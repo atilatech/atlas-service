@@ -3,6 +3,7 @@ Search anything.
 
 [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/atilatech/atlas-service)
 
+For a tutorial on how this service works, see the [Deploy Whisper and Sentence Transformer Model to HuggingFace notebook](notebooks/deploy_whisper_and_sentence_transformer_to_huggingface.ipynb) or open it in a Colab: <a href="https://colab.research.google.com/github/atilatech/atlas-service/blob/master/notebooks/deploy_whisper_and_sentence_transformer_to_huggingface.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>
 ## Quickstart
 
 ```bash
