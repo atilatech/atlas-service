@@ -1,5 +1,3 @@
-org: atilatech
-app: atlas-service
 service: atlas-service
 
 provider:
@@ -29,8 +27,12 @@ plugins:
 custom:
   wsgi:
     app: src.app.app
+    packRequirements: false
   pythonRequirements:
-    dockerizePip: non-linux
+    usePipenv: false
+    zip: true
+    slim: true
+    layer: true
   enabled:
     dev: false
     staging: false
@@ -44,6 +46,8 @@ package:
 functions:
  app:
    handler: wsgi_handler.handler
+   layers:
+    - Ref: PythonRequirementsLambdaLayer
    events:
      - http: ANY /
      - http: 'ANY /{proxy+}'
