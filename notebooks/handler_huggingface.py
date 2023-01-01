@@ -42,23 +42,27 @@ class EndpointHandler():
         # process input
         print('data', data)
 
+        if "inputs" not in data:
+            raise Exception(f"data is missing 'inputs' key which  EndpointHandler expects. Received: {data}"
+                            f" See: https://huggingface.co/docs/inference-endpoints/guides/custom_handler#2-create-endpointhandler-cp")
         video_url = data.pop("video_url", None)
-        segments = data.pop("segments", None)
+        query = data.pop("query", None)
         encoded_segments = {}
         if video_url:
             video_with_transcript = self.transcribe_video(video_url)
             encode_transcript = data.pop("encode_transcript", True)
             if encode_transcript:
-                video_with_transcript['transcript']['segments'] = self.combine_transcripts(video_with_transcript)
+                encoded_segments = self.combine_transcripts(video_with_transcript)
                 encoded_segments = {
-                    "encoded_segments": self.encode_sentences(video_with_transcript['transcript']['segments'])
+                    "encoded_segments": self.encode_sentences(encoded_segments)
                 }
             return {
                 **video_with_transcript,
                 **encoded_segments
             }
-        elif segments:
-            encoded_segments = self.encode_sentences(segments)
+        elif query:
+            query = [{"text": query, "id": ""}]
+            encoded_segments = self.encode_sentences(query)
 
             return {
                 "encoded_segments": encoded_segments
@@ -148,7 +152,7 @@ class EndpointHandler():
         video_info = video['video']
         transcript_segments = video['transcript']['segments']
         for i in tqdm(range(0, len(transcript_segments), stride)):
-            i_end = min(len(transcript_segments) - 1, i + window)
+            i_end = min(len(transcript_segments), i + window)
             text = ' '.join(transcript['text']
                             for transcript in
                             transcript_segments[i:i_end])
