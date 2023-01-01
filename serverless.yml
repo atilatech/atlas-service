@@ -23,7 +23,7 @@ plugins:
   - serverless-wsgi
 custom:
   wsgi:
-    app: src.app.app
+    app: app.app
   enabled:
     dev: false
     staging: false
