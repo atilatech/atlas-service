@@ -15,24 +15,12 @@ provider:
     role:
       managedPolicies:
         - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-      statements:
-        - Effect: Allow
-          Action:
-            - secretsmanager:GetSecretValue
-          Resource:
-            - "arn:aws:secretsmanager:us-east-1:439512693357:*"
 plugins:
   - serverless-python-requirements
   - serverless-wsgi
 custom:
   wsgi:
     app: src.app.app
-    packRequirements: false
-  pythonRequirements:
-    usePipenv: false
-    zip: true
-    slim: true
-    layer: true
   enabled:
     dev: false
     staging: false
@@ -46,8 +34,6 @@ package:
 functions:
  app:
    handler: wsgi_handler.handler
-   layers:
-    - Ref: PythonRequirementsLambdaLayer
    events:
      - http: ANY /
      - http: 'ANY /{proxy+}'
