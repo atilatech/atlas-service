@@ -1,8 +1,3 @@
-try:# see: https://github.com/serverless/serverless-python-requirements#dealing-with-lambdas-size-limitations
-  import unzip_requirements
-except ImportError:
-  pass
-
 from flask import Flask, request
 from flask_cors import CORS
 from atlas.transcribe import transcribe_and_search_video
