@@ -1,3 +1,8 @@
+import sys
+
+# allow for relative imports
+sys.path.append('..')
+
 from flask import Flask, request
 from flask_cors import CORS
 from atlas.transcribe import transcribe_and_search_video
